@@ -1,19 +1,22 @@
 #include <iostream>
+#include <cstdint>
+
 
 #include "Image2D.h"
 #include "ImageBuffer.h"
+#include "utils.h"
 
 int main(int argc, char** argv) {
 
-    //NOVO: Usando ImageBuffer.h
+    // Usando ImageBuffer.h
 
-    ImageBuffer<int> img (4,4);
-    img.clear(1);
-    img.setPixel(2,2,9.0f);
+    ImageBuffer<RGB> img (8,8);
+    img.clear(RGB(255,0,0));
+    img.setPixel(2,2,RGB(128,0,0));
 
     for (size_t i = 0; i < img.getHeight(); i++) {
         for (size_t j = 0; j < img.getWidth(); j++) {
-            std::cout << img.getPixel(i,j) << " ";
+            printPixel(img.getPixel(i,j));
         }
         std::cout << '\n';
     }

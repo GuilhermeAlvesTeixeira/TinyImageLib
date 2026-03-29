@@ -33,14 +33,14 @@ public:
 
     // Métodos acessores pixel (GET e SET)
     auto getPixel(size_t row, size_t col){
-        if(col < 0 || col >= width || row < 0 || row >= height) {
+        if(col >= width || row >= height) {
             throw std::out_of_range("Índice fora dos limites Imagem!");
         }
         return data[index(row, col)];
     }
 
     void setPixel(size_t row, size_t col, const T& value ) {
-        if(col < 0 || col >= width || row < 0 || row >= height) {
+        if(col >= width || row >= height) {
             throw std::out_of_range("Índice fora dos limites Imagem!");
         }   
         data[index(row, col)] = value;
