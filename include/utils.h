@@ -28,6 +28,10 @@ void fillRandomRGB(ImageBuffer<RGB>& img) {
     static std::mt19937 gen(seed);
     std::uniform_int_distribution<int> dist(0,255);
 
+    for (auto& pixel : img) {
+        pixel = RGB(dist(gen), dist(gen), dist(gen));
+    }
+
     /*
     for(size_t row = 0; row < img.getHeight(); row++) {
         for(size_t col = 0; col < img.getWidth(); col++) {
@@ -38,13 +42,14 @@ void fillRandomRGB(ImageBuffer<RGB>& img) {
             img.setPixel(row,col,RGB(r,g,b));
         }
     }*/
-   
+
+   /*
    size_t totalPixels = img.getWidth() * img.getHeight();
    RGB* ptr = img.rawData();
 
    for(size_t i = 0; i < totalPixels; i++) {
     ptr[i] = RGB(dist(gen), dist(gen), dist(gen));
-   }
+   }*/
 }
 
 #endif

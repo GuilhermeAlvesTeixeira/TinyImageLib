@@ -63,6 +63,13 @@ public:
         return data.data();
     }
 
+    // Iteradores
+    auto begin() {return data.begin();}
+    auto end() {return data.end();}
+
+    auto begin() const {return data.begin();}
+    auto end() const {return data.end(); }
+
 };
 
 #endif

@@ -14,15 +14,18 @@ int main(int argc, char** argv) {
     img.clear(RGB(255,0,0));
     fillRandomRGB(img);
 
+    /*
     for (size_t i = 0; i < img.getHeight(); i++) {
         for (size_t j = 0; j < img.getWidth(); j++) {
             printPixel(img.getPixel(i,j));
         }
         std::cout << '\n';
-    }
+    }*/
 
-    //std::cout << img.getPixel(2,2) << '\n';
-    
+    for(const auto& pixel : img) {
+         printPixel(pixel);
+         std::cout << " " << '\n';
+    }
 
     return 0;
 
