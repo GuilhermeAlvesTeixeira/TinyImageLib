@@ -27,6 +27,10 @@ public:
     ImageBuffer() = default;
     ImageBuffer(size_t w, size_t h) : width(w), height(h), data(w * h) {}
 
+    //Operator
+    T& operator() (size_t row, size_t col) { return data[index(row, col)];}
+    const T& operator() (size_t row, size_t col) const { return data[index(row, col)];}
+
     // Métodos acessores (GETTERS)
     auto getWidth() const   { return width; }
     auto getHeight() const { return height; }
