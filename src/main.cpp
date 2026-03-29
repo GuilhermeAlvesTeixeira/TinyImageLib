@@ -1,10 +1,11 @@
 #include <iostream>
 
 #include "Image2D.h"
+#include "ImageBuffer.h"
 
 int main(int argc, char** argv) {
     Image2D<size_t> img(4,3);
-    
+
     img.clear(0);
 
     img.setPixel(1,1,255);
