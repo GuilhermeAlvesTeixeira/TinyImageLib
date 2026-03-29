@@ -12,8 +12,7 @@ template<typename T>
     (Cache Miss).
 */
 
-[[deprecated("Essa classe está obsoleta.")]]
-class Image2D {
+class [[deprecated("Essa classe está obsoleta.")]] Image2D {
 private:
     T** data;
     size_t width;
@@ -52,7 +51,7 @@ public:
     //Métodos acessores PIXEL (SET e GET)
     //Lembrete: col -> largura | row -> altura
 
-    void setPixel(size_t row, int col , size_t T& value) {
+    void setPixel(size_t row, int col, const T& value) {
         if(col < 0 || col >= width || row < 0 || row >= height) {
             throw std::out_of_range("Índice fora dos limites Imagem!");
         }

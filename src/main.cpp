@@ -4,6 +4,21 @@
 #include "ImageBuffer.h"
 
 int main(int argc, char** argv) {
+
+    //NOVO: Usando ImageBuffer.h
+
+    ImageBuffer<int> img (4,4);
+    img.clear(0);
+    img.setPixel(2,2,1.0f);
+
+    std::cout << img.getPixel(2,2) << '\n';
+
+    return 0;
+
+    /* 
+    
+    // ANTIGO: USANDO Image2D
+
     Image2D<size_t> img(4,3);
 
     img.clear(0);
@@ -18,4 +33,6 @@ int main(int argc, char** argv) {
         std::cout << '\n';
     }
     return 0;
+    */
+
 }
