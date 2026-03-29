@@ -46,6 +46,14 @@ public:
         data[index(row, col)] = value;
     }
 
+    void clear(const T& value) {
+        for(size_t row = 0; row < height; row++) {
+            for (size_t col = 0; col < width; col++) {
+                data[index(row,col)] = value;
+            }
+        }
+    }
+
     //Acesso Direto
     T* rawData() {
         return data.data();
