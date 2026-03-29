@@ -6,6 +6,13 @@
 
 template<typename T>
 
+/*
+    A estrutura T** data é ineficiente para processamento de imagem real. Nela cada linha pode estar em
+    um lugar diferente da memória RAM. Há gargalos na forma em que o processaor salta de uma linha para outra
+    (Cache Miss).
+*/
+
+[[deprecated("Essa classe está obsoleta.")]]
 class Image2D {
 private:
     T** data;
@@ -14,7 +21,7 @@ private:
 
 public:
     //Construtores
-    Image2D();
+    Image2D() = default;
     Image2D(size_t w, size_t h) : width(w), height(h) {
         data = new T*[height]; //Aloca array de ponteiros (linhas)
 
@@ -45,14 +52,14 @@ public:
     //Métodos acessores PIXEL (SET e GET)
     //Lembrete: col -> largura | row -> altura
 
-    void setPixel(int row, int col , const T& value) {
+    void setPixel(size_t row, int col , size_t T& value) {
         if(col < 0 || col >= width || row < 0 || row >= height) {
             throw std::out_of_range("Índice fora dos limites Imagem!");
         }
         data[row][col] = value;
     }
 
-    T getPixel(int row, int col) {
+    T getPixel(size_t row, size_t col) {
         if(col < 0 || col >= width || row < 0 || row >= height) {
             throw std::out_of_range("Índice fora dos limites Imagem!");
         }
