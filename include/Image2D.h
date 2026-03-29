@@ -47,7 +47,7 @@ public:
     int getHeight() const {
         return height;
     }
-
+ 
     //Métodos acessores PIXEL (SET e GET)
     //Lembrete: col -> largura | row -> altura
 

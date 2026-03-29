@@ -8,10 +8,18 @@ int main(int argc, char** argv) {
     //NOVO: Usando ImageBuffer.h
 
     ImageBuffer<int> img (4,4);
-    img.clear(0);
-    img.setPixel(2,2,1.0f);
+    img.clear(1);
+    img.setPixel(2,2,9.0f);
 
-    std::cout << img.getPixel(2,2) << '\n';
+    for (size_t i = 0; i < img.getHeight(); i++) {
+        for (size_t j = 0; j < img.getWidth(); j++) {
+            std::cout << img.getPixel(i,j) << " ";
+        }
+        std::cout << '\n';
+    }
+
+    //std::cout << img.getPixel(2,2) << '\n';
+    
 
     return 0;
 
