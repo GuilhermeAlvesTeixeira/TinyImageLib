@@ -46,6 +46,15 @@ public:
         data[index(row, col)] = value;
     }
 
+    //Acesso Direto
+    T* rawData() {
+        return data.data();
+    }
+
+    const T* rawData() const {
+        return data.data();
+    }
+
 };
 
 #endif
