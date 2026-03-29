@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
     ImageBuffer<RGB> img (8,8);
     img.clear(RGB(255,0,0));
-    img.setPixel(2,2,RGB(128,0,0));
+    fillRandomRGB(img);
 
     for (size_t i = 0; i < img.getHeight(); i++) {
         for (size_t j = 0; j < img.getWidth(); j++) {
