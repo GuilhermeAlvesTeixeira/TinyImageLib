@@ -5,6 +5,7 @@
 #include "Image2D.h"
 #include "ImageBuffer.h"
 #include "utils.h"
+#include "ImageIO.h"
 
 int main(int argc, char** argv) {
 
@@ -26,6 +27,8 @@ int main(int argc, char** argv) {
          printPixel(pixel);
          std::cout << " " << '\n';
     }
+
+    savePPM(img, "output.ppm");
 
     return 0;
 

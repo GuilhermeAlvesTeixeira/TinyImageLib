@@ -15,6 +15,7 @@ compile_commands.json
 *.out
 *.app
 *.exe
+*.ppm
 
 # ========================
 # Objetos

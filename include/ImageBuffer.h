@@ -20,7 +20,7 @@ private:
     size_t width;
     size_t height;
 
-    size_t index(size_t rows, size_t columns) {
+    size_t index(size_t rows, size_t columns) const {
         return rows * width + columns;
     }
 
@@ -37,12 +37,21 @@ public:
     auto getHeight() const { return height; }
 
     // Métodos acessores pixel (GET e SET)
-    auto getPixel(size_t row, size_t col){
+    T& getPixel(size_t row, size_t col){
         if(col >= width || row >= height) {
-            throw std::out_of_range("Índice fora dos limites Imagem!");
+            throw std::out_of_range("Índice fora dos limites da Imagem!");
         }
         return data[index(row, col)];
     }
+
+    const T& getPixel(size_t row, size_t col) const {
+        if (col >= width || row >= height) {
+            throw std::out_of_range("Índice fora dos limites da Imagem!");
+        }
+        return data[index(row, col)];
+    }
+
+
 
     void setPixel(size_t row, size_t col, const T& value ) {
         if(col >= width || row >= height) {
