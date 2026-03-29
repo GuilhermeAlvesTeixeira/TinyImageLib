@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <exception>
+#include <algorithm>
 
 /*
     Nova ideia: Todos os pixels estão em uma fila única e contínua (vector<T>)
@@ -51,11 +52,7 @@ public:
     }
 
     void clear(const T& value) {
-        for(size_t row = 0; row < height; row++) {
-            for (size_t col = 0; col < width; col++) {
-                data[index(row,col)] = value;
-            }
-        }
+        std::fill(data.begin(), data.end(), value);
     }
 
     //Acesso Direto
