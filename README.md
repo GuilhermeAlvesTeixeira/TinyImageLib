@@ -131,6 +131,50 @@ O PSNR é medido em **decibéis (dB)**, uma escala logarítmica que representa a
 
 # OBS: PARA PROFESSOR GILVAN
 
+## ▶️ Como compilar e executar (CLI)
+
+### 1. Compilação
+
+Na raiz do projeto:
+
+```bash
+mkdir build
+cd build
+cmake ..
+make
+```
+
+### 2. Execução
+
+O programa utiliza uma interface de linha de comando (CLI):
+
+```bash
+./app <input.ppm> <output.ppm> <iteracoes> [--quiet]
+```
+Parâmetros:
+```input.ppm``` → imagem de entrada (PPM P3)
+```output.ppm``` → imagem de saída
+```iteracoes``` → número de ciclos de conversão
+```--quiet``` → (opcional) desativa logs no terminal
+
+### 3. Exemplos de uso
+A partir da raiz do projeto:
+```bash
+./build/app assets/input.ppm saida.ppm 100
+```
+
+Ou dentro da pasta ```build```
+```bash
+./app ../assets/input.ppm saida.ppm 100
+```
+
+### 4. Ajuda
+```bash
+./app --help
+```
+
+---
+
 ## Experimento: Estresse de Conversões
 
 O `main.cpp` implementa um experimento para analisar degradação de imagem.
