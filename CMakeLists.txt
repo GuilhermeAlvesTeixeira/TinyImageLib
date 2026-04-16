@@ -1,29 +1,33 @@
 cmake_minimum_required(VERSION 3.10)
+project(TinyImageLib LANGUAGES CXX)
 
-project(TinyImageLib VERSION 1.0 LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
+# Padrão C++20 (necessário para std::clamp e melhor suporte a templates)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Variável de entrada configurável (Pode ser mudada com -DINPUT_IMAGE=nome.ppm)
+set(INPUT_IMAGE "entrada.ppm" CACHE STRING "Imagem de entrada para o ciclo")
 
-# Lista de arquivos fonte (se você adicionar .cpp futuramente, coloque aqui)
-set(SOURCES 
-    src/main.cpp
-)
+# Coletar arquivos fonte
+file(GLOB_RECURSE SOURCES "src/*.cpp")
 
-# Cria o executável
+# Criar o executável
 add_executable(app ${SOURCES})
 
-# Indica ao compilador para buscar os #include na pasta 'include'
-# O uso de PUBLIC ou INTERFACE é útil se você transformar isso em biblioteca depois
-target_include_directories(app PRIVATE ${INCLUDE_DIR})
+# Incluir diretórios de cabeçalho
+target_include_directories(app PUBLIC include)
 
-# Comando para rodar o projeto de forma mais simples (cmake --build build --target run)
-add_custom_target(run
-    COMMAND ./app
-    DEPENDS app
+# Garante que a imagem de entrada esteja na pasta build para o executável achar
+if(EXISTS "${CMAKE_SOURCE_DIR}/${INPUT_IMAGE}")
+    configure_file("${CMAKE_SOURCE_DIR}/${INPUT_IMAGE}" "${CMAKE_BINARY_DIR}/${INPUT_IMAGE}" COPYONLY)
+endif()
+
+# Automação: Compila e executa o ciclo imediatamente
+add_custom_command(TARGET app POST_BUILD
+    COMMAND ./app ${INPUT_IMAGE}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    COMMENT "Executando o projeto TinyImageLib..."
+    COMMENT "------------------------------------------------
+Executando ciclo RGB -> YCbCr -> HSV -> RGB...
+Imagem: ${INPUT_IMAGE}
+------------------------------------------------"
 )

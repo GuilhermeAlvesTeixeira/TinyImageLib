@@ -6,7 +6,8 @@ O objetivo do projeto é servir como um ambiente didático e experimental para e
 * Estruturas de dados lineares aplicadas a imagens
 * Templates em C++
 * Iteradores
-* Escrita de formatos de imagem sem bibliotecas externas
+* Escrita e leitura de formatos de imagem sem bibliotecas externas
+* Conversões entre espaços de cor e seus impactos
 
 ---
 
@@ -28,28 +29,180 @@ O objetivo do projeto é servir como um ambiente didático e experimental para e
 * `setPixel(row, col, value)`
 * `getPixel(row, col)`
 * `clear(value)` — preenche toda a imagem
-* Acesso direto ao buffer com `rawData()` (futura integração com bibliotecas gráficas externas)
+* Acesso direto ao buffer com `rawData()` (integração futura com APIs gráficas)
 
 ---
 
-### Exportação de imagem (PPM - P3)
+## Espaços de cor suportados
 
-* Escrita de imagens no formato `.ppm` (modo texto)
+A biblioteca agora suporta múltiplas representações de cor:
+
+* **RGB**
+* **YCbCr** (baseado na ITU-R BT.601 — full range)
+* **HSV**
+
+---
+
+## Conversões implementadas
+
+* RGB → YCbCr
+* YCbCr → RGB
+* YCbCr → HSV (via RGB)
+* HSV → RGB
+
+As conversões seguem modelos clássicos utilizados em:
+
+* Compressão de imagem (JPEG)
+* Processamento de vídeo
+* Ferramentas gráficas
+
+---
+
+## Entrada e saída de imagem
+
+### Escrita (PPM - P3)
+
+* Exportação de imagens no formato `.ppm` (modo texto)
 * Não utiliza bibliotecas externas
-* Compatível com visualizadores como GIMP, ImageMagick, etc.
+* Compatível com:
+
+  * GIMP
+  * Krita
+  * ImageMagick
 
 ---
 
-## Como clonar, compilar e executar
+### Leitura (PPM - P3)
 
-```bash
-git clone https://github.com/GuilhermeAlvesTeixeira/TinyImageLib
-mkdir build
-cd build
-cmake ..
-make
-make run
+* Suporte a carregamento de imagens `.ppm`
+* Leitura do header (`P3`, dimensões, max value)
+* Suporte a comentários (`#`)
+* Alocação automática do `ImageBuffer`
+
+---
+
+## Estrutura do Projeto
+
+* `ImageBuffer<T>` → buffer genérico de pixels
+* `types/` → implementações de `RGB`, `YCbCr`, `HSV`
+* `ImageIO.h` → leitura e escrita de imagens
+* `test_utils.h` → métricas de erro (MSE / PSNR)
+
+---
+
+## Métricas de Qualidade
+
+### MSE (Mean Squared Error)
+
+Mede o erro médio ao quadrado entre duas imagens:
+
 ```
+MSE = (1/N) * Σ (I_original - I_processado)²
+```
+
+* Penaliza diferenças maiores de forma mais intensa
+* Útil para cálculo, mas difícil de interpretar diretamente
+
+---
+
+### PSNR (Peak Signal-to-Noise Ratio)
+
+Derivado do MSE:
+
+```
+PSNR = 10 * log10(255² / MSE)
+```
+
+Interpretação:
+
+```
+∞        → imagens idênticas
+> 40 dB  → excelente
+30–40 dB → aceitável
+< 30 dB  → degradação visível
+```
+
+O PSNR é medido em **decibéis (dB)**, uma escala logarítmica que representa a relação entre:
+
+* **Sinal** → imagem original
+* **Ruído** → erro introduzido
+
+---
+
+# OBS: PARA PROFESSOR GILVAN
+
+## Experimento: Estresse de Conversões
+
+O `main.cpp` implementa um experimento para analisar degradação de imagem.
+
+### Pipeline aplicado
+
+```
+RGB → YCbCr → HSV → RGB
+```
+
+Esse processo é executado repetidamente (ex: 100 ciclos).
+
+---
+
+### Objetivo
+
+Avaliar:
+
+* Acúmulo de erro
+* Perda de informação
+* Impacto de múltiplas conversões
+
+---
+
+### Comportamento observado
+
+A cada ciclo:
+
+* Conversões introduzem pequenas imprecisões
+* Ocorre quantização (float → uint8)
+* Transformações não-lineares (HSV) amplificam o erro
+
+Resultado:
+
+* MSE aumenta
+* PSNR diminui
+* A imagem perde qualidade progressivamente
+
+---
+
+### Exemplo de saída
+
+<img width="652" height="247" alt="image" src="https://github.com/user-attachments/assets/7e57ff15-d44e-4a1f-9c91-3c51cc208f94" />
+
+---
+
+### Comparação visual
+
+Recomenda-se comparar:
+
+* Imagem original
+* Imagem após 100 ciclos
+
+Resultados:
+* Utilizando um visualizador de 'ppm' online:
+https://www.cs.rhodes.edu/welshc/COMP141_F16/ppmReader.html
+
+| Imagem Original | Após 100 ciclos |
+|----------------|-----------------|
+| <img src="https://github.com/user-attachments/assets/1fa4df57-a2ec-4fa8-99df-a18029e3b798" width="300"/> | <img src="https://github.com/user-attachments/assets/e76f1120-fa0c-4b03-a231-893ca5c2c854" width="300"/> |
+
+---
+
+### Diferenças observadas
+
+| Aspecto           | Observação                                      |
+|------------------|-------------------------------------------------|
+| Saturação        | Redução perceptível (cores mais “lavadas”)      |
+| Fidelidade de cor| Pequenas alterações acumuladas                  |
+| Contraste        | Leve perda em regiões específicas               |
+| Erro acumulado   | Múltiplas conversões + quantização              |
+| PSNR             | Diminui ao longo dos ciclos                     |
 
 ---
 
@@ -108,21 +261,8 @@ savePPM(img, "polar_gradient.ppm");
 
 ---
 
-### Resultado
-
-O arquivo gerado (`polar_gradient.ppm`) pode ser aberto com:
-
-```bash
-xdg-open polar_gradient.ppm
-```
-
-ou em softwares de imagem como:
-
-* GIMP
-* Krita
-* ImageMagick
-
 ## Saída (Exemplo)
+
 <img width="765" height="596" alt="image" src="https://github.com/user-attachments/assets/7b35e1b0-3673-4ee2-8a7e-00fb878501a5" />
 
 ---
@@ -142,24 +282,13 @@ Cada pixel é representado por três valores (RGB) no intervalo `[0, 255]`.
 
 ---
 
-## Próximos passos (roadmap)
-
-* [ ] Exportação binária (PPM P6)
-* [ ] Suporte a grayscale (PGM)
-* [ ] Leitura de arquivos `.ppm`
-* [ ] Sistema de traits para pixels genéricos
-* [ ] Filtros de imagem (invert, blur, edge detection)
-* [ ] Operações funcionais (map, transform)
-* [ ] Paralelismo e otimização
-
----
-
 ## Objetivo do projeto
 
 Este projeto não busca substituir bibliotecas como OpenCV, mas sim:
 
 * Ensinar como imagens funcionam internamente
 * Explorar design moderno em C++
+* Investigar transformações de cor e erro numérico
 * Servir como base para projetos maiores (renderização, engines, etc.)
 
 ---

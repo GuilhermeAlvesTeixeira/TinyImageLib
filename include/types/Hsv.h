@@ -7,7 +7,7 @@
 namespace TinyImage {
     struct HSV {
         float h, s, v;
-        RGB toRgb() const;
+        RGB toRGB() const;
     };
 }
 #endif

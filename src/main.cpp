@@ -1,59 +1,53 @@
 #include <iostream>
 #include <cstdint>
 
-#include "Image2D.h"
 #include "ImageBuffer.h"
-#include "utils.h"
 #include "ImageIO.h"
+#include "utils.h"
+#include "test_utils.h"
 
 #include "types/Rgb.h"
 #include "types/YCbCr.h"
 #include "types/Hsv.h"
 
+using namespace TinyImage;
 
-int main(int argc, char** argv) {
+int main() {
+    ImageBuffer<RGB> buffer;
 
-    // Usando ImageBuffer.h
+    try {
+      loadPPM(buffer, "input.ppm");
 
-    ImageBuffer<TinyImage::RGB> img (8,8);
-    img.clear(TinyImage::RGB(255,0,0));
-    fillRandomRGB(img);
-
-    /*
-    for (size_t i = 0; i < img.getHeight(); i++) {
-        for (size_t j = 0; j < img.getWidth(); j++) {
-            printPixel(img.getPixel(i,j));
-        }
-        std::cout << '\n';
-    }*/
-
-    for(const auto& pixel : img) {
-         printPixel(pixel);
-         std::cout << " " << '\n';
+    } catch (const std::exception& e) {
+        std::cerr << "Erro no carregamento: " << e.what() << std::endl;
+        return 1;
     }
 
-    savePPM(img, "output.ppm");
+    ImageBuffer<RGB> original = buffer; 
+    const int iteracoes = 100; 
 
-    return 0;
+    std::cout << "Iniciando processamento de " << iteracoes << " ciclos..." << std::endl;
 
-    /* 
-    
-    // ANTIGO: USANDO Image2D
-
-    Image2D<size_t> img(4,3);
-
-    img.clear(0);
-
-    img.setPixel(1,1,255);
-    img.setPixel(2,0,128);
-
-    for(size_t row = 0; row < img.getHeight(); row++) {
-        for( size_t col = 0; col < img.getWidth(); col++) {
-            std::cout << img.getPixel(row,col) << " ";
+    for (int i = 0; i < iteracoes; ++i) {
+       
+        for (auto it = buffer.begin(); it != buffer.end(); ++it) {
+            *it = it->toYCbCr().toHSV().toRGB();
         }
-        std::cout << '\n';
-    }
-    return 0;
-    */
 
+        double mse = computeMSE(original, buffer);
+        double psnr = computePSNR(mse);
+
+        std::cout << "Ciclo " << i + 1 << " concluído." << " | MSE: " << mse<< " | PSNR: " << psnr << " dB" << std::endl;
+    }
+
+    // 3. Salvar o resultado
+    try {
+        savePPM(buffer, "saida_ciclo.ppm");
+        std::cout << "\nSucesso! Imagem salva como: saida_ciclo.ppm" << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Erro ao salvar: " << e.what() << std::endl;
+        return 1;
+    }
+
+    return 0;
 }
