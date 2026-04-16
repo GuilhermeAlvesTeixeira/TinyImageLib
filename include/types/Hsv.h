@@ -3,8 +3,11 @@
 
 // H: [0,360];
 // S,V: [0,1]
-struct HSV {
-    float h, s, v;
-};
 
+namespace TinyImage {
+    struct HSV {
+        float h, s, v;
+        RGB toRgb() const;
+    };
+}
 #endif

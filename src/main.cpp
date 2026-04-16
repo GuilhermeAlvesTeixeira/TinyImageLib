@@ -1,11 +1,15 @@
 #include <iostream>
 #include <cstdint>
 
-
 #include "Image2D.h"
 #include "ImageBuffer.h"
 #include "utils.h"
 #include "ImageIO.h"
+
+#include "types/Rgb.h"
+#include "types/YCbCr.h"
+#include "types/Hsv.h"
+
 
 int main(int argc, char** argv) {
 

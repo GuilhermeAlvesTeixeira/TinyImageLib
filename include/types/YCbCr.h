@@ -15,9 +15,16 @@
 //Y: [0,255]
 //CbCr: [-128, 127]
 
-struct YCbCr {
-    float y, cb, cr;
-};
+namespace TinyImage {
+    struct RGB;
+    struct HSV;
+
+    struct YCbCr {
+        float y, cb, cr;
+        RGB toRGB() const;
+        HSV toHSV() const;
+    };
+}
 
 
 #endif
