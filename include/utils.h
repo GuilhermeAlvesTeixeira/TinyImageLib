@@ -17,20 +17,20 @@ void printPixel(const T& value) {
 
 //Especialização do RGB
 template <>
-void printPixel<RGB>(const RGB& value) {
+void printPixel<TinyImage::RGB>(const TinyImage::RGB& value) {
     std::cout << "("
               << static_cast<int>(value.r) << ", " 
               << static_cast<int>(value.g) << ", "  
               << static_cast<int>(value.b) << ")"; 
 }
 
-void fillRandomRGB(ImageBuffer<RGB>& img) {
+void fillRandomRGB(ImageBuffer<TinyImage::RGB>& img) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     static std::mt19937 gen(seed);
     std::uniform_int_distribution<int> dist(0,255);
 
     for (auto& pixel : img) {
-        pixel = RGB(dist(gen), dist(gen), dist(gen));
+        pixel = TinyImage::RGB(dist(gen), dist(gen), dist(gen));
     }
 
     /*

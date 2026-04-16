@@ -15,8 +15,8 @@ int main(int argc, char** argv) {
 
     // Usando ImageBuffer.h
 
-    ImageBuffer<RGB> img (8,8);
-    img.clear(RGB(255,0,0));
+    ImageBuffer<TinyImage::RGB> img (8,8);
+    img.clear(TinyImage::RGB(255,0,0));
     fillRandomRGB(img);
 
     /*
